@@ -122,4 +122,16 @@ class lumberjack(
   # package(s)
   class { 'lumberjack::package': }
 
+  file { '/etc/lumberjack':
+    ensure => directory,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755'
+  }
+
+  Anchor['lumberjack::begin'] ->
+  Class['lumberjack::package'] ->
+  File['/etc/lumberjack'] ->
+  Anchor['lumberjack::end']
+
 }

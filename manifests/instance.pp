@@ -1,26 +1,57 @@
 # Define: lumberjack::instance
 #
-# This define allows you to setup an instance of lumberjack
+# This define allows you to setup an instance of lumberjack.
+#
+# NOTE: The value of $json_conf will affect certain parameters.
 #
 # === Parameters
 #
 # [*host*]
-#   Host name or IP address of the Logstash instance to connect to
-#   Value type is string
-#   Default value: undef
-#   This variable is optional
+#   This value is affected by the value of $json_conf.
+#   $json_conf = false
+#     Host name or IP address of the Logstash instance to connect to.
+#     Value type is string
+#     Default value: undef
+#     This variable is optional
+#   $json_conf = true
+#     Array of "<hostname_or_ip>:<port>" values.
+#     Value type is an array of string
+#     Default value: undef
+#     This variable is required
 #
 # [*port*]
-#   Port number of the Logstash instance to connect to
+#   This value is affected by the value of $json_conf.
+#   $json_conf = false
+#     Port number of the Logstash instance to connect to
+#     Value type is number
+#     Default value: undef
+#     This variable is optional
+#   $json_conf = true
+#     Default value: undef
+#     This variable is unused
+#
+# [*timeout*]
+#   Network timeout value when $json_conf is enabled.
 #   Value type is number
-#   Default value: undef
-#   This variable is optional
+#   Default value: 15
+#   This value is optional
 #
 # [*files*]
-#   Array of files you wish to process
-#   Value type is array
-#   Default value: undef
-#   This variable is optional
+#   This value is affected by the value of $json_conf.
+#   $json_conf = false
+#     Array of files you wish to process.
+#     Value type is array
+#     Default value: undef
+#     This variable is optional
+#   $json_conf = true
+#     A hash of
+#     Value type is hash of files configuration.
+#     Default value: undef
+#     This variable is optional
+#
+# [*json_conf*]
+#   Create a JSON configuration file. This will affect how the $host, $port,
+#   and $files parameters are used.
 #
 # [*ssl_ca_file*]
 #   File to use for the SSL CA
@@ -48,7 +79,9 @@ define lumberjack::instance(
   $ssl_ca_file,
   $host           = undef,
   $port           = undef,
+  $timeout        = '15',
   $files          = undef,
+  $json_conf      = false,
   $fields         = false,
   $run_as_service = true,
   $ensure         = $logstash::ensure
@@ -64,31 +97,35 @@ define lumberjack::instance(
 
   if ($run_as_service == true ) {
 
-    # Input validation
-    validate_string($host)
+    if $json_conf == false {
+      # Input validation
+      validate_string($host)
 
-    if ! is_numeric($port) {
-      fail("\"${port}\" is not a valid port parameter value")
+      if ! is_numeric($port) {
+        fail("\"${port}\" is not a valid port parameter value")
+      }
+
+      validate_array($files)
+      $logfiles = join($files,' ')
+
+      if $fields {
+        validate_hash($fields)
+      }
     }
 
-    validate_array($files)
-    $logfiles = join($files,' ')
-
-    if $fields {
-      validate_hash($fields)
-    }
-
-    # Setup init file if running as a service
-    $notify_lumberjack = $lumberjack::restart_on_change ? {
-      true  => Service["lumberjack-${name}"],
-      false => undef,
+    if $lumberjack::restart_on_change == true {
+      $lumberjack_notify = Service["lumberjack-${name}"]
+      $lumberjack_before = undef
+    } else {
+      $lumberjack_notify = undef
+      $lumberjack_before = Service["lumberjack-${name}"]
     }
 
     file { "/etc/init.d/lumberjack-${name}":
       ensure  => $ensure,
       mode    => '0755',
       content => template("${module_name}/etc/init.d/lumberjack.erb"),
-      notify  => $notify_lumberjack
+      notify  => $lumberjack_notify
     }
 
     #### Service management
@@ -138,7 +175,7 @@ define lumberjack::instance(
     service { "lumberjack-${name}":
       ensure     => $service_ensure,
       enable     => $service_enable,
-      name       => $lumberjack::params::service_name,
+      name       => "${lumberjack::params::service_name}-${name}",
       hasstatus  => $lumberjack::params::service_hasstatus,
       hasrestart => $lumberjack::params::service_hasrestart,
       pattern    => $lumberjack::params::service_pattern,
@@ -146,13 +183,46 @@ define lumberjack::instance(
 
   } else {
 
-    $notify_lumberjack = undef
+    $lumberjack_notify = undef
+    $lumberjack_before = undef
 
+  }
+
+  # Configuration
+  if $json_conf {
+    if !is_array($host) {
+      fail('When $json_conf is true $host must be an array of hostname:port values')
+    }
+
+    if ! is_numeric($timeout) {
+      fail("\"${timeout}\" is not a valid timeout parameter value")
+    }
+
+    $conf_hash = {
+      network => {
+        'servers' => $host,
+        'ssl ca'  => "/etc/lumberjack/${name}/ca.crt",
+        'timeout' => $timeout,
+      },
+      files => $files
+    }
+
+
+    file { "/etc/lumberjack/${name}/lumberjack.conf":
+      mode    => '0640',
+      owner   => 'root',
+      group   => 'root',
+      content => sorted_json($conf_hash),
+      require => File["/etc/lumberjack/${name}"],
+      notify  => $lumberjack_notify,
+      before  => $lumberjack_before
+    }
   }
 
 
   file { "/etc/lumberjack/${name}":
     ensure => directory,
+    require => File['/etc/lumberjack']
   }
 
   # Setup certificate files
@@ -160,7 +230,8 @@ define lumberjack::instance(
     ensure  => $ensure,
     source  => $ssl_ca_file,
     require => File[ "/etc/lumberjack/${name}" ],
-    notify  => $notify_lumberjack
+    notify  => $lumberjack_notify,
+    before  => $lumberjack_before
   }
 
 }
