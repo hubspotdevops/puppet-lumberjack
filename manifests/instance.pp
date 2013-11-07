@@ -65,14 +65,14 @@ define lumberjack::instance(
 
   if ($run_as_service == true ) {
 
-    # Input validation
-    validate_string($host)
-
-    if ! is_numeric($port) {
-      fail("\"${port}\" is not a valid port parameter value")
-    }
-
     if $json_conf == false {
+      # Input validation
+      validate_string($host)
+
+      if ! is_numeric($port) {
+        fail("\"${port}\" is not a valid port parameter value")
+      }
+
       validate_array($files)
       $logfiles = join($files,' ')
 
