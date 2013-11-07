@@ -14,7 +14,7 @@ end
 
 DAEMON_PATH="/opt/lumberjack/"
 DAEMON="bin/lumberjack.sh"
-<% if conf_hash %>
+<% if json_conf %>
 DAEMONOPTS="-config /etc/lumberjack/<%= @name %>/lumberjack.conf"
 <% else %>
 DAEMONOPTS="--ssl-ca-path /etc/lumberjack/<%= @name %>/ca.crt --host <%= @host %> --port <%= @port %> <%= extra_fields %> <%= @logfiles %>"
