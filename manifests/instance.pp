@@ -50,7 +50,7 @@ define lumberjack::instance(
   $port           = undef,
   $files          = undef,
   $fields         = false,
-  $json_conf      = false,
+  $conf_hash      = undef,
   $run_as_service = true,
   $ensure         = $logstash::ensure
 ) {
@@ -72,7 +72,7 @@ define lumberjack::instance(
       fail("\"${port}\" is not a valid port parameter value")
     }
 
-    if $json_conf == false {
+    if $conf_hash == undef{
       validate_array($files)
       $logfiles = join($files,' ')
 
@@ -157,7 +157,7 @@ define lumberjack::instance(
   }
 
   # Configuration
-  if $json_conf {
+  if $conf_hash {
     $conf_global_hash = {
       network => {
         'servers' => $host,
@@ -165,7 +165,7 @@ define lumberjack::instance(
       }
     }
 
-    $conf_hash_full = merge($conf_global_hash, $json_conf)
+    $conf_hash_full = merge($conf_global_hash, $conf_hash)
 
     file { "/etc/lumberjack/${name}/lumberjack.conf":
       mode    => '0640',
