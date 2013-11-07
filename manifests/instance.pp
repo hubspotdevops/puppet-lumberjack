@@ -208,8 +208,9 @@ define lumberjack::instance(
   }
 
 
-  file { [ '/etc/lumberjack', "/etc/lumberjack/${name}" ]:
+  file { "/etc/lumberjack/${name}":
     ensure => directory,
+    require => File['/etc/lumberjack']
   }
 
   # Setup certificate files
