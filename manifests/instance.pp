@@ -30,6 +30,12 @@
 #     Default value: undef
 #     This variable is unused
 #
+# [*timeout*]
+#   Network timeout value when $json_conf is enabled.
+#   Value type is number
+#   Default value: 15
+#   This value is optional
+#
 # [*files*]
 #   This value is affected by the value of $json_conf.
 #   $json_conf = false
@@ -73,6 +79,7 @@ define lumberjack::instance(
   $ssl_ca_file,
   $host           = undef,
   $port           = undef,
+  $timeout        = '15',
   $files          = undef,
   $json_conf      = false,
   $fields         = false,
@@ -187,10 +194,15 @@ define lumberjack::instance(
       fail('When $json_conf is true $host must be an array of hostname:port values')
     }
 
+    if ! is_numeric($timeout) {
+      fail("\"${timeout}\" is not a valid timeout parameter value")
+    }
+
     $conf_hash = {
       network => {
         'servers' => $host,
         'ssl ca'  => "/etc/lumberjack/${name}/ca.crt",
+        'timeout' => $timeout,
       },
       files => $files
     }
