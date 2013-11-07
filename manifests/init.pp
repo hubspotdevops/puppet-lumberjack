@@ -122,4 +122,8 @@ class lumberjack(
   # package(s)
   class { 'lumberjack::package': }
 
+  Anchor['lumberjack::begin'] ->
+  Class['lumberjack::package'] ->
+  Anchor['lumberjack::end']
+
 }
