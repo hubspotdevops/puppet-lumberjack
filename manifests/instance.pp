@@ -1,26 +1,51 @@
 # Define: lumberjack::instance
 #
-# This define allows you to setup an instance of lumberjack
+# This define allows you to setup an instance of lumberjack.
+#
+# NOTE: The value of $json_conf will affect certain parameters.
 #
 # === Parameters
 #
 # [*host*]
-#   Host name or IP address of the Logstash instance to connect to
-#   Value type is string
-#   Default value: undef
-#   This variable is optional
+#   This value is affected by the value of $json_conf.
+#   $json_conf = false
+#     Host name or IP address of the Logstash instance to connect to.
+#     Value type is string
+#     Default value: undef
+#     This variable is optional
+#   $json_conf = true
+#     Array of "<hostname_or_ip>:<port>" values.
+#     Value type is an array of string
+#     Default value: undef
+#     This variable is required
 #
 # [*port*]
-#   Port number of the Logstash instance to connect to
-#   Value type is number
-#   Default value: undef
-#   This variable is optional
+#   This value is affected by the value of $json_conf.
+#   $json_conf = false
+#     Port number of the Logstash instance to connect to
+#     Value type is number
+#     Default value: undef
+#     This variable is optional
+#   $json_conf = true
+#     Default value: undef
+#     This variable is unused
 #
 # [*files*]
-#   Array of files you wish to process
-#   Value type is array
-#   Default value: undef
-#   This variable is optional
+#   This value is affected by the value of $json_conf.
+#   $json_conf = false
+#     Array of files you wish to process.
+#     Value type is array
+#     Default value: undef
+#     This variable is optional
+#   $json_conf = true
+#     A hash of
+#     Value type is hash of files configuration.
+#     Default value: undef
+#     This variable is optional
+#
+# [*json_conf*]
+#   Create a JSON configuration file. This will affect how the $host, $port,
+#   and $files parameters are used.
 #
 # [*ssl_ca_file*]
 #   File to use for the SSL CA
