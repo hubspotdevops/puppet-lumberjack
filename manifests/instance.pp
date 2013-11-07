@@ -78,17 +78,19 @@ define lumberjack::instance(
       validate_hash($fields)
     }
 
-    # Setup init file if running as a service
-    $notify_lumberjack = $lumberjack::restart_on_change ? {
-      true  => Service["lumberjack-${name}"],
-      false => undef,
+    if $lumberjack::restart_on_change == true {
+      $lumberjack_notify = Service["lumberjack-${name}"]
+      $lumberjack_before = undef
+    } else {
+      $lumberjack_notify = undef
+      $lumberjack_before = Service["lumberjack-${name}"]
     }
 
     file { "/etc/init.d/lumberjack-${name}":
       ensure  => $ensure,
       mode    => '0755',
       content => template("${module_name}/etc/init.d/lumberjack.erb"),
-      notify  => $notify_lumberjack
+      notify  => $lumberjack_notify
     }
 
     #### Service management
@@ -146,7 +148,8 @@ define lumberjack::instance(
 
   } else {
 
-    $notify_lumberjack = undef
+    $lumberjack_notify = undef
+    $lumberjack_before = undef
 
   }
 
@@ -160,7 +163,8 @@ define lumberjack::instance(
     ensure  => $ensure,
     source  => $ssl_ca_file,
     require => File[ "/etc/lumberjack/${name}" ],
-    notify  => $notify_lumberjack
+    notify  => $lumberjack_notify,
+    before  => $lumberjack_before
   }
 
 }
