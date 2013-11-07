@@ -158,6 +158,10 @@ define lumberjack::instance(
 
   # Configuration
   if $json_conf {
+    if !is_array($host) {
+      fail('When $json_conf is true $host must be an array of hostname:port values')
+    }
+
     $conf_hash = {
       network => {
         'servers' => $host,
