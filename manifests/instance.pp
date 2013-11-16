@@ -179,6 +179,7 @@ define lumberjack::instance(
       hasstatus  => $lumberjack::params::service_hasstatus,
       hasrestart => $lumberjack::params::service_hasrestart,
       pattern    => $lumberjack::params::service_pattern,
+      require    => File["/etc/init.d/lumberjack-${name}"]
     }
 
   } else {
