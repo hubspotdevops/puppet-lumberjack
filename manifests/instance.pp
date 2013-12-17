@@ -1,6 +1,6 @@
-# Define: lumberjack::instance
+# Define: logstash-forwarder::instance
 #
-# This define allows you to setup an instance of lumberjack
+# This define allows you to setup an instance of logstash-forwarder
 #
 # === Parameters
 #
@@ -44,7 +44,7 @@
 #
 # * Richard Pijnenburg <mailto:richard@ispavailability.com>
 #
-define lumberjack::instance(
+define logstash-forwarder::instance(
   $ssl_ca_file,
   $host           = undef,
   $port           = undef,
@@ -54,7 +54,7 @@ define lumberjack::instance(
   $ensure         = $logstash::ensure
 ) {
 
-  require lumberjack
+  require logstash-forwarder
 
   File {
     owner => 'root',
@@ -79,24 +79,24 @@ define lumberjack::instance(
     }
 
     # Setup init file if running as a service
-    $notify_lumberjack = $lumberjack::restart_on_change ? {
-      true  => Service["lumberjack-${name}"],
+    $notify_logstash-forwarder = $logstash-forwarder::restart_on_change ? {
+      true  => Service["logstash-forwarder-${name}"],
       false => undef,
     }
 
-    file { "/etc/init.d/lumberjack-${name}":
+    file { "/etc/init.d/logstash-forwarder-${name}":
       ensure  => $ensure,
       mode    => '0755',
-      content => template("${module_name}/etc/init.d/lumberjack.erb"),
-      notify  => $notify_lumberjack
+      content => template("${module_name}/etc/init.d/logstash-forwarder.erb"),
+      notify  => $notify_logstash-forwarder
     }
 
     #### Service management
 
     # set params: in operation
-    if $lumberjack::ensure == 'present' {
+    if $logstash-forwarder::ensure == 'present' {
 
-      case $lumberjack::status {
+      case $logstash-forwarder::status {
         # make sure service is currently running, start it on boot
         'enabled': {
           $service_ensure = 'running'
@@ -121,7 +121,7 @@ define lumberjack::instance(
         # note: don't forget to update the parameter check in init.pp if you
         #       add a new or change an existing status.
         default: {
-          fail("\"${lumberjack::status}\" is an unknown service status value")
+          fail("\"${logstash-forwarder::status}\" is an unknown service status value")
         }
       }
 
@@ -135,32 +135,32 @@ define lumberjack::instance(
     }
 
     # action
-    service { "lumberjack-${name}":
+    service { "logstash-forwarder-${name}":
       ensure     => $service_ensure,
       enable     => $service_enable,
-      name       => $lumberjack::params::service_name,
-      hasstatus  => $lumberjack::params::service_hasstatus,
-      hasrestart => $lumberjack::params::service_hasrestart,
-      pattern    => $lumberjack::params::service_pattern,
+      name       => $logstash-forwarder::params::service_name,
+      hasstatus  => $logstash-forwarder::params::service_hasstatus,
+      hasrestart => $logstash-forwarder::params::service_hasrestart,
+      pattern    => $logstash-forwarder::params::service_pattern,
     }
 
   } else {
 
-    $notify_lumberjack = undef
+    $notify_logstash-forwarder = undef
 
   }
 
 
-  file { "/etc/lumberjack/${name}":
+  file { "/etc/logstash-forwarder/${name}":
     ensure => directory,
   }
 
   # Setup certificate files
-  file { "/etc/lumberjack/${name}/ca.crt":
+  file { "/etc/logstash-forwarder/${name}/ca.crt":
     ensure  => $ensure,
     source  => $ssl_ca_file,
-    require => File[ "/etc/lumberjack/${name}" ],
-    notify  => $notify_lumberjack
+    require => File[ "/etc/logstash-forwarder/${name}" ],
+    notify  => $notify_logstash-forwarder
   }
 
 }

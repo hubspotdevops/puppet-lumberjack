@@ -7,17 +7,17 @@ else
 end
 -%>
 #!/bin/bash
-# Lumberjack daemon
+# logstash-forwarder daemon
 # chkconfig: 345 20 80
-# description: lumberjack daemon
-# processname: lumberjack
+# description: logstash-forwarder daemon
+# processname: logstash-forwarder
 
-DAEMON_PATH="/opt/lumberjack/"
-DAEMON="bin/lumberjack.sh"
-DAEMONOPTS="--ssl-ca-path /etc/lumberjack/<%= @instance %>/ca.crt --host <%= @host %> --port <%= @port %> <%= extra_fields %> <%= @logfiles %>"
+DAEMON_PATH="/opt/logstash-forwarder/"
+DAEMON="bin/logstash-forwarder.sh"
+DAEMONOPTS="--ssl-ca-path /etc/logstash-forwarder/<%= @instance %>/ca.crt --host <%= @host %> --port <%= @port %> <%= extra_fields %> <%= @logfiles %>"
 
-NAME="lumberjack-<%= @instance %>"
-DESC="Lumberjack-<%= @instance %>"
+NAME="logstash-forwarder-<%= @instance %>"
+DESC="logstash-forwarder-<%= @instance %>"
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 

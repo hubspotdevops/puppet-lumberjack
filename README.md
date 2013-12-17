@@ -1,8 +1,8 @@
-# puppet-lumberjack
+# puppet-logstash-forwarder
 
-A puppet module for managing and configuring lumberjack
+A puppet module for managing and configuring logstash-forwarder
 
-https://github.com/jordansissel/lumberjack
+https://github.com/jordansissel/logstash-forwarder
 
 This module is puppet 3 tested
 
@@ -10,7 +10,7 @@ This module is puppet 3 tested
 
 Installation, make sure service is running and will be started at boot time:
 
-     lumberjack::instance { 'foo': 
+     logstash-forwarder::instance { 'foo': 
        host  => 'logstashhost',
        port  => '7200',
        files => ['/var/log/messages', '/var/log/thing/*'],
@@ -19,13 +19,13 @@ Installation, make sure service is running and will be started at boot time:
 
 Removal/decommissioning:
 
-     class { 'lumberjack':
+     class { 'logstash-forwarder':
        ensure => 'absent',
      }
 
 Install everything but disable service(s) afterwards:
 
-     class { 'lumberjack':
+     class { 'logstash-forwarder':
        status => 'disabled',
      }
 

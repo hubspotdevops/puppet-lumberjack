@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe 'lumberjack::instance', :type => 'define' do
+describe 'logstash-forwarder::instance', :type => 'define' do
 
   let(:title) { 'foo' }
   let(:facts) { { :operatingsystem => 'CentOS' } }
-  let(:pre_condition) { 'class {"lumberjack":; }' }
+  let(:pre_condition) { 'class {"logstash-forwarder":; }' }
 
   context "Setup a instance with the service" do
 
@@ -17,9 +17,9 @@ describe 'lumberjack::instance', :type => 'define' do
       :run_as_service => true
     } end
 
-    it { should contain_file('/etc/init.d/lumberjack-foo') }
-    it { should contain_file('/etc/lumberjack/foo') }
-    it { should contain_file('/etc/lumberjack/foo/ca.crt') }
+    it { should contain_file('/etc/init.d/logstash-forwarder-foo') }
+    it { should contain_file('/etc/logstash-forwarder/foo') }
+    it { should contain_file('/etc/logstash-forwarder/foo/ca.crt') }
 
   end
 
@@ -30,9 +30,9 @@ describe 'lumberjack::instance', :type => 'define' do
       :run_as_service => false
     } end
 
-    it { should_not contain_file('/etc/init.d/lumberjack-foo') }
-    it { should contain_file('/etc/lumberjack/foo') }
-    it { should contain_file('/etc/lumberjack/foo/ca.crt') }
+    it { should_not contain_file('/etc/init.d/logstash-forwarder-foo') }
+    it { should contain_file('/etc/logstash-forwarder/foo') }
+    it { should contain_file('/etc/logstash-forwarder/foo/ca.crt') }
 
   end
 
