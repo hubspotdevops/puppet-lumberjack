@@ -1,4 +1,4 @@
-# == Class: logstash-forwarder::package
+# == Class: logstashforwarder::package
 #
 # This class exists to coordinate all software package management related
 # actions, functionality and logical units in a central place.
@@ -12,7 +12,7 @@
 # === Examples
 #
 # This class may be imported by other classes to use its functionality:
-#   class { 'logstash-forwarder::package': }
+#   class { 'logstashforwarder::package': }
 #
 # It is not intended to be used directly by external resources like node
 # definitions or other modules.
@@ -22,17 +22,17 @@
 #
 # * Richard Pijnenburg <mailto:richard@ispavailability.com>
 #
-class logstash-forwarder::package {
+class logstashforwarder::package {
 
   #### Package management
 
   # set params: in operation
-  if $logstash-forwarder::ensure == 'present' {
+  if $logstashforwarder::ensure == 'present' {
 
     # Check if we want to install a specific version or not
-    if $logstash-forwarder::version == false {
+    if $logstashforwarder::version == false {
 
-      $package_ensure = $logstash-forwarder::autoupgrade ? {
+      $package_ensure = $logstashforwarder::autoupgrade ? {
         true  => 'latest',
         false => 'present',
       }
@@ -40,7 +40,7 @@ class logstash-forwarder::package {
     } else {
 
       # install specific version
-      $package_ensure = $logstash-forwarder::version
+      $package_ensure = $logstashforwarder::version
 
     }
 
@@ -50,7 +50,7 @@ class logstash-forwarder::package {
   }
 
   # action
-  package { $logstash-forwarder::params::package:
+  package { $logstashforwarder::params::package:
     ensure => $package_ensure,
   }
 

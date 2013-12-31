@@ -1,6 +1,6 @@
-# Define: logstash-forwarder::instance
+# Define: logstashforwarder::instance
 #
-# This define allows you to setup an instance of logstash-forwarder
+# This define allows you to setup an instance of logstashforwarder
 #
 # === Parameters
 #
@@ -44,7 +44,7 @@
 #
 # * Richard Pijnenburg <mailto:richard@ispavailability.com>
 #
-define logstash-forwarder::instance(
+define logstashforwarder::instance(
   $ssl_ca_file,
   $host           = undef,
   $port           = undef,
@@ -54,7 +54,7 @@ define logstash-forwarder::instance(
   $ensure         = $logstash::ensure
 ) {
 
-  require logstash-forwarder
+  require logstashforwarder
 
   File {
     owner => 'root',
@@ -79,7 +79,7 @@ define logstash-forwarder::instance(
     }
 
     # Setup init file if running as a service
-    $notify_logstash-forwarder = $logstash-forwarder::restart_on_change ? {
+    $notify_logstashforwarder = $logstashforwarder::restart_on_change ? {
       true  => Service["logstash-forwarder-${name}"],
       false => undef,
     }
@@ -88,15 +88,15 @@ define logstash-forwarder::instance(
       ensure  => $ensure,
       mode    => '0755',
       content => template("${module_name}/etc/init.d/logstash-forwarder.erb"),
-      notify  => $notify_logstash-forwarder
+      notify  => $notify_logstashforwarder
     }
 
     #### Service management
 
     # set params: in operation
-    if $logstash-forwarder::ensure == 'present' {
+    if $logstashforwarder::ensure == 'present' {
 
-      case $logstash-forwarder::status {
+      case $logstashforwarder::status {
         # make sure service is currently running, start it on boot
         'enabled': {
           $service_ensure = 'running'
@@ -121,7 +121,7 @@ define logstash-forwarder::instance(
         # note: don't forget to update the parameter check in init.pp if you
         #       add a new or change an existing status.
         default: {
-          fail("\"${logstash-forwarder::status}\" is an unknown service status value")
+          fail("\"${logstashforwarder::status}\" is an unknown service status value")
         }
       }
 
@@ -138,15 +138,15 @@ define logstash-forwarder::instance(
     service { "logstash-forwarder-${name}":
       ensure     => $service_ensure,
       enable     => $service_enable,
-      name       => $logstash-forwarder::params::service_name,
-      hasstatus  => $logstash-forwarder::params::service_hasstatus,
-      hasrestart => $logstash-forwarder::params::service_hasrestart,
-      pattern    => $logstash-forwarder::params::service_pattern,
+      name       => $logstashforwarder::params::service_name,
+      hasstatus  => $logstashforwarder::params::service_hasstatus,
+      hasrestart => $logstashforwarder::params::service_hasrestart,
+      pattern    => $logstashforwarder::params::service_pattern,
     }
 
   } else {
 
-    $notify_logstash-forwarder = undef
+    $notify_logstashforwarder = undef
 
   }
 
@@ -160,7 +160,7 @@ define logstash-forwarder::instance(
     ensure  => $ensure,
     source  => $ssl_ca_file,
     require => File[ "/etc/logstash-forwarder/${name}" ],
-    notify  => $notify_logstash-forwarder
+    notify  => $notify_logstashforwarder
   }
 
 }

@@ -10,7 +10,7 @@ This module is puppet 3 tested
 
 Installation, make sure service is running and will be started at boot time:
 
-     logstash-forwarder::instance { 'foo': 
+     logstashforwarder::instance { 'foo': 
        host  => 'logstashhost',
        port  => '7200',
        files => ['/var/log/messages', '/var/log/thing/*'],
@@ -19,13 +19,13 @@ Installation, make sure service is running and will be started at boot time:
 
 Removal/decommissioning:
 
-     class { 'logstash-forwarder':
+     class { 'logstashforwarder':
        ensure => 'absent',
      }
 
 Install everything but disable service(s) afterwards:
 
-     class { 'logstash-forwarder':
+     class { 'logstashforwarder':
        status => 'disabled',
      }
 

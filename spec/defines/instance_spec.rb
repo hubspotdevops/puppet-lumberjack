@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe 'logstash-forwarder::instance', :type => 'define' do
+describe 'logstashforwarder::instance', :type => 'define' do
 
   let(:title) { 'foo' }
   let(:facts) { { :operatingsystem => 'CentOS' } }
-  let(:pre_condition) { 'class {"logstash-forwarder":; }' }
+  let(:pre_condition) { 'class {"logstashforwarder":; }' }
 
   context "Setup a instance with the service" do
 

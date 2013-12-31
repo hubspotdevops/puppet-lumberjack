@@ -1,6 +1,6 @@
-# == Class: logstash-forwarder
+# == Class: logstashforwarder
 #
-# This class is able to install or remove logstash-forwarder on a node.
+# This class is able to install or remove logstashforwarder on a node.
 # It manages the status of the related service.
 #
 # [Add description - What does this module do on a node?] FIXME/TODO
@@ -67,7 +67,7 @@
 # [*fields*]
 #   extra fields to add
 #
-# The default values for the parameters are set in logstash-forwarder::params. Have
+# The default values for the parameters are set in logstashforwarder::params. Have
 # a look at the corresponding <tt>params.pp</tt> manifest file if you need more
 # technical information about them.
 #
@@ -75,15 +75,15 @@
 # === Examples
 #
 # * Installation, make sure service is running and will be started at boot time:
-#     class { 'logstash-forwarder': }
+#     class { 'logstashforwarder': }
 #
 # * Removal/decommissioning:
-#     class { 'logstash-forwarder':
+#     class { 'logstashforwarder':
 #       ensure => 'absent',
 #     }
 #
 # * Install everything but disable service(s) afterwards
-#     class { 'logstash-forwarder':
+#     class { 'logstashforwarder':
 #       status => 'disabled',
 #     }
 #
@@ -92,13 +92,13 @@
 #
 # * Richard Pijnenburg <mailto:richard@ispavailability.com>
 #
-class logstash-forwarder(
-  $ensure            = $logstash-forwarder::params::ensure,
-  $autoupgrade       = $logstash-forwarder::params::autoupgrade,
-  $status            = $logstash-forwarder::params::status,
-  $restart_on_change = $logstash-forwarder::params::restart_on_change,
+class logstashforwarder(
+  $ensure            = $logstashforwarder::params::ensure,
+  $autoupgrade       = $logstashforwarder::params::autoupgrade,
+  $status            = $logstashforwarder::params::status,
+  $restart_on_change = $logstashforwarder::params::restart_on_change,
   $version           = false,
-) inherits logstash-forwarder::params {
+) inherits logstashforwarder::params {
 
   #### Validate parameters
 
@@ -116,10 +116,10 @@ class logstash-forwarder(
   }
 
   #### Manage actions
-  anchor { 'logstash-forwarder::begin': }
-  anchor { 'logstash-forwarder::end': }
+  anchor { 'logstashforwarder::begin': }
+  anchor { 'logstashforwarder::end': }
 
   # package(s)
-  class { 'logstash-forwarder::package': }
+  class { 'logstashforwarder::package': }
 
 }
