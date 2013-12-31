@@ -1,4 +1,4 @@
-# == Class: lumberjack::params
+# == Class: logstashforwarder::params
 #
 # This class exists to
 # 1. Declutter the default value assignment for class parameters.
@@ -27,7 +27,7 @@
 #
 # * Richard Pijnenburg <mailto:richard@ispavailability.com>
 #
-class lumberjack::params {
+class logstashforwarder::params {
 
   #### Default values for the parameters of the main module class, init.pp
 
@@ -49,11 +49,11 @@ class lumberjack::params {
   case $::operatingsystem {
     'CentOS', 'Fedora', 'Scientific', 'OracleLinux', 'Amazon', 'RedHat': {
       # main application
-      $package = [ 'lumberjack' ]
+      $package = [ 'logstash-forwarder' ]
     }
     'Debian', 'Ubuntu': {
       # main application
-      $package = [ 'lumberjack' ]
+      $package = [ 'logstash-forwarder' ]
     }
     default: {
       fail("\"${module_name}\" provides no package default value
@@ -64,13 +64,13 @@ class lumberjack::params {
   # service parameters
   case $::operatingsystem {
     'CentOS', 'Fedora', 'Scientific', 'OracleLinux', 'Amazon', 'RedHat': {
-      $service_name       = 'lumberjack'
+      $service_name       = 'logstash-forwarder'
       $service_hasrestart = true
       $service_hasstatus  = true
       $service_pattern    = $service_name
     }
     'Debian', 'Ubuntu': {
-      $service_name       = 'lumberjack'
+      $service_name       = 'logstash-forwarder'
       $service_hasrestart = true
       $service_hasstatus  = true
       $service_pattern    = $service_name
