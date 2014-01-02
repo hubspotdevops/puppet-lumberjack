@@ -14,7 +14,7 @@ end
 
 DAEMON_PATH="/opt/logstash-forwarder/"
 DAEMON="bin/logstash-forwarder.sh"
-logstash-forwarder_LOG="/var/log/logstash-forwarder.log"
+logstashforwarder_LOG="/var/log/logstash-forwarder.log"
 <% if json_conf %>
 DAEMONOPTS="-config /etc/logstash-forwarder/<%= @name %>/logstash-forwarder.conf"
 <% else %>
@@ -30,7 +30,7 @@ case "$1" in
 start)
 	printf "%-50s" "Starting $NAME..."
 	cd $DAEMON_PATH
-	PID=`$DAEMON $DAEMONOPTS >> $logstash-forwarder_LOG 2>&1 & echo $!`
+	PID=`$DAEMON $DAEMONOPTS >> $logstashforwarder_LOG 2>&1 & echo $!`
 	#echo "Saving PID" $PID " to " $PIDFILE
         if [ -z $PID ]; then
             printf "%s\n" "Fail"
