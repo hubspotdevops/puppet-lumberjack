@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'lumberjack', :type => 'class' do
+describe 'logstashforwarder', :type => 'class' do
 
   context "On Debian OS" do
 
@@ -9,7 +9,7 @@ describe 'lumberjack', :type => 'class' do
     } end
 
     # init.pp
-    it { should contain_class('lumberjack::package') }
+    it { should contain_class('logstashforwarder::package') }
 
   end
 
@@ -20,7 +20,7 @@ describe 'lumberjack', :type => 'class' do
     } end
 
     # init.pp
-    it { should contain_class('lumberjack::package') }
+    it { should contain_class('logstashforwarder::package') }
 
   end
 
@@ -31,7 +31,7 @@ describe 'lumberjack', :type => 'class' do
     } end
 
     # init.pp
-    it { should contain_class('lumberjack::package') }
+    it { should contain_class('logstashforwarder::package') }
 
   end
 
@@ -42,7 +42,7 @@ describe 'lumberjack', :type => 'class' do
     } end
 
     # init.pp
-    it { should contain_class('lumberjack::package') }
+    it { should contain_class('logstashforwarder::package') }
 
   end
 
@@ -53,7 +53,7 @@ describe 'lumberjack', :type => 'class' do
     } end
 
     # init.pp
-    it { should contain_class('lumberjack::package') }
+    it { should contain_class('logstashforwarder::package') }
 
   end
 
@@ -64,7 +64,7 @@ describe 'lumberjack', :type => 'class' do
     } end
 
     # init.pp
-    it { should contain_class('lumberjack::package') }
+    it { should contain_class('logstashforwarder::package') }
 
   end
 
@@ -75,7 +75,7 @@ describe 'lumberjack', :type => 'class' do
     } end
 
     # init.pp
-    it { should contain_class('lumberjack::package') }
+    it { should contain_class('logstashforwarder::package') }
 
   end
 
@@ -86,7 +86,7 @@ describe 'lumberjack', :type => 'class' do
     } end
 
     # init.pp
-    it { should contain_class('lumberjack::package') }
+    it { should contain_class('logstashforwarder::package') }
 
   end
 

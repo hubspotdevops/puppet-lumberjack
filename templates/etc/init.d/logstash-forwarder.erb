@@ -7,22 +7,22 @@ else
 end
 -%>
 #!/bin/bash
-# Lumberjack daemon
+# logstash-forwarder daemon
 # chkconfig: 345 20 80
-# description: lumberjack daemon
-# processname: lumberjack
+# description: logstash-forwarder daemon
+# processname: logstash-forwarder
 
-DAEMON_PATH="/opt/lumberjack/"
-DAEMON="bin/lumberjack.sh"
-LUMBERJACK_LOG="/var/log/lumberjack.log"
+DAEMON_PATH="/opt/logstash-forwarder/"
+DAEMON="bin/logstash-forwarder.sh"
+logstashforwarder_LOG="/var/log/logstash-forwarder.log"
 <% if json_conf %>
-DAEMONOPTS="-config /etc/lumberjack/<%= @name %>/lumberjack.conf"
+DAEMONOPTS="-config /etc/logstash-forwarder/<%= @name %>/logstash-forwarder.conf"
 <% else %>
-DAEMONOPTS="--ssl-ca-path /etc/lumberjack/<%= @name %>/ca.crt --host <%= @host %> --port <%= @port %> <%= extra_fields %> <%= @logfiles %>"
+DAEMONOPTS="--ssl-ca-path /etc/logstash-forwarder/<%= @name %>/ca.crt --host <%= @host %> --port <%= @port %> <%= extra_fields %> <%= @logfiles %>"
 <% end %>
 
-NAME="lumberjack-<%= @name %>"
-DESC="Lumberjack-<%= @name %>"
+NAME="logstash-forwarder-<%= @name %>"
+DESC="logstash-forwarder-<%= @name %>"
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 
@@ -30,7 +30,7 @@ case "$1" in
 start)
 	printf "%-50s" "Starting $NAME..."
 	cd $DAEMON_PATH
-	PID=`$DAEMON $DAEMONOPTS >> $LUMBERJACK_LOG 2>&1 & echo $!`
+	PID=`$DAEMON $DAEMONOPTS >> $logstashforwarder_LOG 2>&1 & echo $!`
 	#echo "Saving PID" $PID " to " $PIDFILE
         if [ -z $PID ]; then
             printf "%s\n" "Fail"

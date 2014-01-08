@@ -1,6 +1,6 @@
-# == Class: lumberjack
+# == Class: logstashforwarder
 #
-# This class is able to install or remove lumberjack on a node.
+# This class is able to install or remove logstashforwarder on a node.
 # It manages the status of the related service.
 #
 # [Add description - What does this module do on a node?] FIXME/TODO
@@ -67,7 +67,7 @@
 # [*fields*]
 #   extra fields to add
 #
-# The default values for the parameters are set in lumberjack::params. Have
+# The default values for the parameters are set in logstashforwarder::params. Have
 # a look at the corresponding <tt>params.pp</tt> manifest file if you need more
 # technical information about them.
 #
@@ -75,15 +75,15 @@
 # === Examples
 #
 # * Installation, make sure service is running and will be started at boot time:
-#     class { 'lumberjack': }
+#     class { 'logstashforwarder': }
 #
 # * Removal/decommissioning:
-#     class { 'lumberjack':
+#     class { 'logstashforwarder':
 #       ensure => 'absent',
 #     }
 #
 # * Install everything but disable service(s) afterwards
-#     class { 'lumberjack':
+#     class { 'logstashforwarder':
 #       status => 'disabled',
 #     }
 #
@@ -92,13 +92,13 @@
 #
 # * Richard Pijnenburg <mailto:richard@ispavailability.com>
 #
-class lumberjack(
-  $ensure            = $lumberjack::params::ensure,
-  $autoupgrade       = $lumberjack::params::autoupgrade,
-  $status            = $lumberjack::params::status,
-  $restart_on_change = $lumberjack::params::restart_on_change,
+class logstashforwarder(
+  $ensure            = $logstashforwarder::params::ensure,
+  $autoupgrade       = $logstashforwarder::params::autoupgrade,
+  $status            = $logstashforwarder::params::status,
+  $restart_on_change = $logstashforwarder::params::restart_on_change,
   $version           = false,
-) inherits lumberjack::params {
+) inherits logstashforwarder::params {
 
   #### Validate parameters
 
@@ -116,22 +116,22 @@ class lumberjack(
   }
 
   #### Manage actions
-  anchor { 'lumberjack::begin': }
-  anchor { 'lumberjack::end': }
+  anchor { 'logstashforwarder::begin': }
+  anchor { 'logstashforwarder::end': }
 
   # package(s)
-  class { 'lumberjack::package': }
+  class { 'logstashforwarder::package': }
 
-  file { '/etc/lumberjack':
+  file { '/etc/logstash-forwarder':
     ensure => directory,
     owner  => 'root',
     group  => 'root',
     mode   => '0755'
   }
 
-  Anchor['lumberjack::begin'] ->
-  Class['lumberjack::package'] ->
-  File['/etc/lumberjack'] ->
-  Anchor['lumberjack::end']
+  Anchor['logstashforwarder::begin'] ->
+  Class['logstashforwarder::package'] ->
+  File['/etc/logstash-forwarder'] ->
+  Anchor['logstashforwarder::end']
 
 }
